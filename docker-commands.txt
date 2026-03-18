@@ -1,1 +1,95 @@
+Docker Notes: 
+Basic Docker Commands – Notes
 
+1. Running a Container
+Command:
+docker run <image_name>
+
+Example:
+docker run nginx
+
+Notes:
+- If image exists locally → container starts
+- If not → Docker pulls from Docker Hub
+- Default tag used: latest
+
+
+2. Listing Containers
+
+Running containers only:
+docker ps
+
+All containers (including stopped):
+docker ps -a
+
+Shows:
+- Container ID
+- Image
+- Status
+- Ports
+- Name
+
+
+3. Stopping and Removing Containers
+
+Stop a container:
+docker stop <container_name_or_id>
+
+Remove a container:
+docker rm <container_name_or_id>
+
+Note:
+- Container must be stopped before removing
+
+
+4. Managing Docker Images
+
+List images:
+docker images
+
+Remove an image:
+docker rmi <image_name>
+
+Condition:
+- No container should be using the image
+
+Pull image without running:
+docker pull <image_name>
+
+
+5. Ubuntu Container Behavior
+
+Run:
+docker run ubuntu
+
+Notes:
+- Container exits immediately
+- Reason: no long-running process
+
+Keep it running:
+docker run ubuntu sleep 5
+
+
+6. Execute Commands in Running Container
+
+Command:
+docker exec <container_name_or_id> <command>
+
+Example:
+docker exec distracted_mcclintock cat /etc/hosts
+
+Use cases:
+- Debugging
+- Inspecting container
+
+
+7. Running Containers in Background
+
+Foreground:
+docker run kodekloud/simple-webapp
+
+Detached mode:
+docker run -d kodekloud/simple-webapp
+
+Notes:
+- Detached mode returns container ID
