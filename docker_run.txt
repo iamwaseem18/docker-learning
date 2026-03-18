@@ -1,0 +1,128 @@
+DOCKER RUN - COMPLETE NOTES
+
+1. RUNNING CONTAINERS
+- Run a container:
+  docker run redis
+
+- Run a specific version:
+  docker run redis:4.0
+
+- If no tag is specified, Docker uses "latest" by default.
+
+
+2. INTERACTIVE MODE
+- By default, containers are non-interactive.
+
+- Use interactive + terminal mode for input:
+  docker run -it kodekloud/simple-prompt-docker
+
+- -i  → interactive
+- -t  → terminal
+
+
+3. DETACHED MODE (BACKGROUND)
+- Run container in background:
+  docker run -d ubuntu sleep 1500
+
+- List running containers:
+  docker ps
+
+- Attach to container:
+  docker attach <container_id>
+
+- Stop container:
+  docker stop <container_id>
+
+
+4. RUN COMMAND INSIDE CONTAINER
+- Example:
+  docker run ubuntu cat /etc/*release*
+
+- Runs a command and exits after execution.
+
+
+5. PORT MAPPING
+- Map host port to container port:
+  docker run -p 80:5000 kodekloud/webapp
+
+- Multiple instances:
+  docker run -p 80:5000 kodekloud/webapp
+  docker run -p 8000:5000 kodekloud/webapp
+  docker run -p 8001:5000 kodekloud/webapp
+
+
+6. DATA PERSISTENCE (VOLUMES)
+- Without volume → data is lost after container removal
+
+- Use volume mapping:
+  docker run -v /opt/datadir:/var/lib/mysql mysql
+
+
+7. CONTAINER INSPECTION
+- List containers:
+  docker ps
+
+- Detailed info:
+  docker inspect <container_id>
+
+
+8. VIEW LOGS
+- View container logs:
+  docker logs <container_id>
+
+
+9. IMAGE TAGS
+- Specify version using tag:
+  docker run ubuntu:17.10
+
+- Default = latest if not specified
+
+
+10. FOREGROUND VS BACKGROUND
+- Foreground (attached):
+  docker run ubuntu sleep 15
+
+- Background (detached):
+  docker run -d ubuntu sleep 1500
+
+
+11. TIMER EXAMPLE
+- Run in foreground:
+  docker run timer
+
+- Run in background:
+  docker run -d timer
+
+- Attach:
+  docker attach <container_id>
+
+
+12. JENKINS CONTAINER
+- Pull image:
+  docker pull jenkins
+
+- Run with ports:
+  docker run -p 8080:8080 -p 50000:50000 jenkins
+
+- Access via browser:
+  http://<host-ip>:8080
+
+
+13. JENKINS DATA PERSISTENCE
+- Create directory:
+  mkdir my-jenkins-data
+
+- Run with volume:
+  docker run -p 8080:8080 -p 50000:50000 \
+  -v /root/my-jenkins-data:/var/jenkins_home \
+  -u root jenkins
+
+- Data persists even after container restart
+
+
+14. IMPORTANT NOTES
+- Containers stop if no long-running process exists
+- Use -d for long-running apps
+- Use -it for interactive apps
+- Use -p to expose services
+- Use -v to persist data
