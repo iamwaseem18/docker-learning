@@ -1,22 +1,43 @@
-Docker Notes: 
-Basic Docker Commands – Notes
+Docker Commands – Complete Notes
 
-1. Running a Container
+--------------------------------------------------
+1. Running Containers
+--------------------------------------------------
+
 Command:
 docker run <image_name>
 
-Example:
+Examples:
 docker run nginx
+docker run centos
 
 Notes:
 - If image exists locally → container starts
 - If not → Docker pulls from Docker Hub
 - Default tag used: latest
+- Custom image format: <username>/<repository>
 
 
-2. Listing Containers
+--------------------------------------------------
+2. Pulling Images
+--------------------------------------------------
 
-Running containers only:
+Command:
+docker pull <image_name>
+
+Example:
+docker pull ubuntu
+
+Notes:
+- Downloads image without running container
+- Use docker images to verify
+
+
+--------------------------------------------------
+3. Listing Containers
+--------------------------------------------------
+
+Running containers:
 docker ps
 
 All containers (including stopped):
@@ -30,66 +51,120 @@ Shows:
 - Name
 
 
-3. Stopping and Removing Containers
-
-Stop a container:
-docker stop <container_name_or_id>
-
-Remove a container:
-docker rm <container_name_or_id>
-
-Note:
-- Container must be stopped before removing
-
-
-4. Managing Docker Images
-
-List images:
-docker images
-
-Remove an image:
-docker rmi <image_name>
-
-Condition:
-- No container should be using the image
-
-Pull image without running:
-docker pull <image_name>
-
-
-5. Ubuntu Container Behavior
-
-Run:
-docker run ubuntu
-
-Notes:
-- Container exits immediately
-- Reason: no long-running process
-
-Keep it running:
-docker run ubuntu sleep 5
-
-
-6. Execute Commands in Running Container
-
-Command:
-docker exec <container_name_or_id> <command>
+--------------------------------------------------
+4. Running Containers with Commands
+--------------------------------------------------
 
 Example:
-docker exec distracted_mcclintock cat /etc/hosts
-
-Use cases:
-- Debugging
-- Inspecting container
-
-
-7. Running Containers in Background
-
-Foreground:
-docker run kodekloud/simple-webapp
-
-Detached mode:
-docker run -d kodekloud/simple-webapp
+docker run ubuntu sleep 5
+docker run centos sleep 20
 
 Notes:
-- Detached mode returns container ID
+- Runs a specific command inside container
+- Container stops after command completes
+
+
+--------------------------------------------------
+5. Interactive Mode
+--------------------------------------------------
+
+Command:
+docker run -it <image_name> bash
+
+Example:
+docker run -it centos bash
+
+Notes:
+- -it = interactive terminal
+- Opens shell inside container
+
+
+--------------------------------------------------
+6. Detached Mode (Background)
+--------------------------------------------------
+
+Command:
+docker run -d <image_name> <command>
+
+Example:
+docker run -d ubuntu sleep 100
+
+Notes:
+- Runs container in background
+- Returns container ID
+
+
+--------------------------------------------------
+7. Container Exit Behavior
+--------------------------------------------------
+
+Notes:
+- Containers stop when main process ends
+- Exit code 0 → normal exit
+- Exit code 137 → forcefully stopped
+
+
+--------------------------------------------------
+8. Stopping Containers
+--------------------------------------------------
+
+Command:
+docker stop <container_id_or_name>
+
+
+--------------------------------------------------
+9. Removing Containers
+--------------------------------------------------
+
+Command:
+docker rm <container_id>
+
+Multiple:
+docker rm <id1> <id2> <id3>
+
+Notes:
+- Container must be stopped before removing
+- Partial IDs can be used
+
+
+--------------------------------------------------
+10. Executing Commands in Running Container
+--------------------------------------------------
+
+Command:
+docker exec <container_id> <command>
+
+Example:
+docker exec <id> cat /etc/hosts
+
+Notes:
+- Used for debugging and inspection
+
+
+--------------------------------------------------
+11. Listing Images
+--------------------------------------------------
+
+Command:
+docker images
+
+Shows:
+- Repository
+- Tag
+- Image ID
+- Size
+
+
+--------------------------------------------------
+12. Removing Images
+--------------------------------------------------
+
+Command:
+docker rmi <image_name>
+
+Example:
+docker rmi nginx
+
+Notes:
+- Image must not be used by any container
+- Remove containers first if needed
