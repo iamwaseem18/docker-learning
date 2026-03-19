@@ -1,0 +1,259 @@
+1. RUNNING CONTAINERS
+
+Run a container:
+
+docker run redis
+
+Run a specific version:
+
+docker run redis:4.0
+
+Default tag = latest if not specified
+
+2. INTERACTIVE MODE
+
+Containers are non-interactive by default
+
+Use interactive + terminal:
+
+docker run -it kodekloud/simple-prompt-docker
+
+-i → interactive
+
+-t → terminal
+
+3. DETACHED MODE (BACKGROUND)
+
+Run in background:
+
+docker run -d ubuntu sleep 1500
+
+List running containers:
+
+docker ps
+
+Attach:
+
+docker attach <container_id>
+
+Stop:
+
+docker stop <container_id>
+4. RUN COMMAND INSIDE CONTAINER
+
+Run a command:
+
+docker run ubuntu cat /etc/*release*
+
+Container exits after execution
+
+5. PORT MAPPING
+
+Map ports:
+
+docker run -p 80:5000 kodekloud/webapp
+
+Multiple instances:
+
+docker run -p 8000:5000 webapp
+docker run -p 8001:5000 webapp
+6. DATA PERSISTENCE (VOLUMES)
+
+Without volume → data lost
+
+Use volume:
+
+docker run -v /opt/datadir:/var/lib/mysql mysql
+7. CONTAINER INSPECTION
+
+List:
+
+docker ps
+
+Detailed info:
+
+docker inspect <container_id>
+8. VIEW LOGS
+docker logs <container_id>
+9. IMAGE TAGS
+docker run ubuntu:17.10
+
+Default = latest
+
+10. FOREGROUND VS BACKGROUND
+
+Foreground:
+
+docker run ubuntu sleep 15
+
+Background:
+
+docker run -d ubuntu sleep 1500
+11. TIMER EXAMPLE
+
+Foreground:
+
+docker run timer
+
+Background:
+
+docker run -d timer
+
+Attach:
+
+docker attach <container_id>
+12. JENKINS CONTAINER
+
+Pull:
+
+docker pull jenkins
+
+Run:
+
+docker run -p 8080:8080 -p 50000:50000 jenkins
+
+Access:
+
+http://<host-ip>:8080
+13. JENKINS DATA PERSISTENCE
+
+Create directory:
+
+mkdir my-jenkins-data
+
+Run with volume:
+
+docker run -p 8080:8080 -p 50000:50000 \
+-v /root/my-jenkins-data:/var/jenkins_home \
+-u root jenkins
+
+Data persists after restart
+
+🧱 DOCKER IMAGES & DOCKERFILE
+14. DOCKER IMAGE BASICS
+
+Image = template to create containers
+
+Built using Dockerfile
+
+Each instruction = layer
+
+15. DOCKERFILE STRUCTURE
+FROM ubuntu
+
+RUN apt-get update && apt-get install -y python python-pip
+
+RUN pip install flask
+
+COPY . /opt/source-code
+
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
+16. DOCKERFILE INSTRUCTIONS
+
+FROM → base image
+
+RUN → execute commands
+
+COPY → copy files
+
+ENTRYPOINT → default command
+
+17. BUILD IMAGE
+docker build -t my-image .
+
+Check images:
+
+docker images
+18. CUSTOM IMAGE (FLASK APP)
+Steps
+
+Base OS
+
+Install dependencies
+
+Install Python packages
+
+Copy code
+
+Run app
+
+Example
+FROM ubuntu
+
+RUN apt-get update && apt-get install -y python python-pip
+
+RUN pip install flask
+
+COPY app.py /opt/app.py
+
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0", "--app", "/opt/app.py"]
+Run
+docker run -p 5000:5000 my-app
+🌱 ENVIRONMENT VARIABLES
+19. WHY USE
+
+Avoid hardcoding
+
+Change config without editing code
+
+20. PYTHON EXAMPLE
+color = os.environ.get('APP_COLOR')
+21. RUN WITH ENV VARIABLE
+export APP_COLOR=blue
+python app.py
+22. DOCKER ENV VARIABLES
+docker run -e APP_COLOR=blue simple-webapp-color
+
+Multiple containers:
+
+docker run -e APP_COLOR=blue app
+docker run -e APP_COLOR=green app
+23. CHECK ENV VARIABLES
+docker inspect <container_id>
+⚙️ CMD vs ENTRYPOINT
+24. DEFAULT BEHAVIOR
+
+Containers run a single process
+
+If process stops → container stops
+
+25. CMD
+CMD ["sleep", "5"]
+
+Default command
+
+Can be overridden
+
+docker run ubuntu sleep 10
+26. ENTRYPOINT
+ENTRYPOINT ["sleep"]
+CMD ["5"]
+
+ENTRYPOINT = fixed command
+
+CMD = default argument
+
+Behavior
+docker run image
+
+→ runs: sleep 5
+
+docker run image 10
+
+→ runs: sleep 10
+
+27. OVERRIDE ENTRYPOINT
+docker run --entrypoint sleep2.0 image 10
+28. IMPORTANT NOTES
+
+Container stops if no running process
+
+Use -d for long-running apps
+
+Use -it for interactive apps
+
+Use -p to expose services
+
+Use -v for persistence
+
+Use -e for environment variables
