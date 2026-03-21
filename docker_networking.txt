@@ -1,0 +1,108 @@
+What is Docker Networking?
+
+Docker networking allows containers to:
+
+Communicate with each other
+Communicate with the host
+Be isolated when needed
+Default Docker Networks
+
+When Docker is installed, it creates 3 default networks:
+
+1. Bridge (default)
+2. Host
+3. None
+1. Bridge Network (Default)
+Private internal network
+Containers get IP like: 172.17.x.x
+Containers can talk to each other
+Example:
+docker run ubuntu
+Key Point:
+External access requires port mapping
+docker run -p 5000:80 nginx
+2. Host Network
+Uses host’s network directly
+No isolation between container and host
+Example:
+docker run --network host nginx
+Behavior:
+App runs directly on host port
+No need for -p (port mapping)
+Limitation:
+Cannot run multiple containers on same port
+3. None Network
+No network access at all
+Example:
+docker run --network none ubuntu
+Use case:
+High security
+Complete isolation
+Custom Networks
+
+Used for better isolation and control.
+
+Create Custom Network
+docker network create \
+  --driver bridge \
+  --subnet 182.18.0.0/16 \
+  my-network
+List Networks
+docker network ls
+Container Communication
+
+Containers in same network can communicate using:
+
+Container Name (Preferred)
+
+Example:
+
+mysql.connect("mysql")
+Why Not IP?
+IP addresses can change
+Docker provides built-in DNS
+Docker Internal DNS
+Runs at: 127.0.0.11
+Resolves container names → IP addresses
+Inspect Network Details
+docker inspect <container_id>
+
+Gives:
+
+IP address
+Network name
+MAC address
+Under the Hood
+
+Docker uses:
+
+1. Network Namespaces
+Each container has its own network environment
+2. Virtual Ethernet (veth pairs)
+Connects containers to networks
+Real Example
+
+Web app + Database:
+
+Both on same network
+Web connects to DB using:
+db:3306
+Key Concepts Summary
+Bridge → default internal network
+Host → no isolation
+None → full isolation
+Custom networks → better control
+Use container names for communication
+Interview Points
+Default Docker networks
+Difference: bridge vs host
+Why container names over IP
+What is Docker DNS
+How containers communicate
+Final Takeaway
+
+Docker networking provides:
+
+Isolation (security)
+Communication (connectivity)
+Flexibility (custom networks)
