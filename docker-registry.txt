@@ -1,0 +1,95 @@
+What is Docker Registry?
+
+Docker Registry is a storage system where Docker images are stored and managed.
+
+Without a registry:
+
+You cannot pull images
+You cannot share images
+Default Registry: Docker Hub
+
+By default, Docker uses Docker Hub (docker.io).
+
+Example:
+docker run nginx
+
+This actually means:
+
+docker.io/library/nginx
+Image Naming Convention
+<registry>/<user_or_org>/<image_name>
+Examples:
+Official image:
+nginx → docker.io/library/nginx
+User image:
+myuser/app → docker.io/myuser/app
+Running Containers from Registry
+docker run nginx
+
+Docker will:
+
+Check locally
+If not found → pull from registry
+Run container
+Other Popular Registries
+Docker Hub → default
+Google Container Registry → gcr.io
+AWS ECR
+Azure Container Registry
+Private Registries
+
+Used for:
+
+Internal applications
+Secure images
+Company projects
+Login to Private Registry
+docker login private-registry.io
+
+Then run:
+
+docker run private-registry.io/my-app
+Important Note
+
+You must login before:
+
+Pulling private images
+Pushing images
+Pushing Images to Registry
+Step 1: Tag Image
+docker tag my-image myuser/my-image
+Step 2: Push Image
+docker push myuser/my-image
+Creating Your Own Registry (On-Premise)
+
+Docker provides a registry image.
+
+Run Registry Container
+docker run -d -p 5000:5000 --name registry registry:2
+Tag Image for Local Registry
+docker tag my-image localhost:5000/my-image
+Push to Local Registry
+docker push localhost:5000/my-image
+Pull from Local Registry
+docker pull localhost:5000/my-image
+Key Concepts
+Registry stores images
+Docker Hub is default registry
+Images follow naming convention
+Private registries require authentication
+You can host your own registry
+Interview Points
+What is Docker Registry?
+Difference between image and container
+What happens when you run docker run nginx
+How to push image to registry
+What is private registry
+Final Takeaway
+
+Docker Registry enables:
+
+Image sharing
+Image storage
+Deployment across environments
+
+Without it, Docker ecosystem doesn’t work.
