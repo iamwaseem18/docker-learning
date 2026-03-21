@@ -1,0 +1,107 @@
+What is Docker Engine?
+
+Docker Engine is the core component that allows you to build, run, and manage containers.
+
+It works using a client-server architecture.
+
+Core Components of Docker
+
+When Docker is installed on Linux, it includes three main parts:
+
+1. Docker Daemon
+Runs in the background
+Manages:
+Containers
+Images
+Networks
+Volumes
+2. Docker REST API
+Acts as a bridge between CLI and daemon
+Allows external tools to interact with Docker
+3. Docker CLI
+Command-line tool (docker)
+Used by users to run commands
+
+Example:
+
+docker run nginx
+How They Work Together
+
+Flow:
+
+User → Docker CLI → REST API → Docker Daemon → Container
+Remote Docker Engine
+
+Docker CLI does not need to be on the same machine.
+
+Example:
+
+docker -H=10.123.2.1:2375 run nginx
+
+This runs a container on a remote Docker host.
+
+Container Isolation (Namespaces)
+
+Docker uses Linux Namespaces to isolate containers.
+
+Each container gets its own:
+
+Process IDs (PID)
+Network
+File system
+IPC
+Hostname
+PID Namespace Example
+Inside container → process shows as PID 1
+On host → same process has a different PID
+
+Meaning:
+
+Container thinks it’s independent
+But actually runs on host kernel
+Resource Management (cgroups)
+
+By default, containers can use all system resources.
+
+Docker uses cgroups (control groups) to limit resources.
+
+Limit CPU Usage
+docker run --cpus=0.5 ubuntu
+
+→ Uses only 50% CPU
+
+Limit Memory Usage
+docker run --memory=100m ubuntu
+
+→ Uses max 100MB RAM
+
+Why cgroups Matter
+
+Prevents:
+
+One container from crashing the system
+Resource starvation
+Performance issues
+Key Concepts Summary
+Docker Engine = backend system running containers
+CLI interacts with daemon via REST API
+Namespaces → isolation
+cgroups → resource control
+Interview Points
+Docker uses client-server architecture
+Containers share host OS but are isolated
+Isolation → namespaces
+Resource limits → cgroups
+CLI can connect to remote Docker Engine
+Final Takeaway
+
+Docker Engine makes containers:
+
+Lightweight
+Isolated
+Efficient
+
+It achieves this using:
+
+Namespaces (isolation)
+cgroups (resource control)
