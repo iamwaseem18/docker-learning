@@ -1,0 +1,140 @@
+What is Docker Storage?
+
+Docker storage explains how:
+
+Data is stored inside containers
+Images are built using layers
+Data persists even after containers are deleted
+Docker File System Structure
+
+Docker stores all data under:
+
+/var/lib/docker
+Important Directories
+containers/ → container-related files
+images/ → image data
+volumes/ → persistent data
+overlay2/ → layered filesystem
+Docker Layered Architecture
+
+Docker images are built in layers.
+
+Each instruction in a Dockerfile creates a new layer.
+
+Example Dockerfile
+FROM ubuntu
+RUN apt-get update && apt-get install -y python
+RUN pip install flask
+COPY . /app
+ENTRYPOINT ["python", "app.py"]
+How Layers Work
+
+Each step creates a layer:
+
+Base image (Ubuntu)
+Install packages
+Install Python libraries
+Copy code
+Set entrypoint
+Key Concept: Layer Reuse (Caching)
+
+If layers don’t change, Docker reuses them.
+
+Why this matters:
+Faster builds
+Saves storage
+Efficient updates
+
+Only changed layers are rebuilt.
+
+Read-Only vs Writable Layer
+Image Layers
+Read-only
+Cannot be modified
+Container Layer
+Writable (top layer)
+Stores runtime changes
+Copy-on-Write Mechanism
+
+When a file is modified:
+
+Original file is copied
+Changes are applied in writable layer
+Important Behavior
+
+When container is deleted:
+
+Writable layer is deleted
+All changes are lost
+Problem: Data Loss
+
+Example:
+
+Running MySQL container
+Data stored inside container
+Container removed → data gone
+Solution: Volumes
+
+Volumes provide persistent storage.
+
+Creating a Volume
+docker volume create data_volume
+Using a Volume
+docker run -v data_volume:/var/lib/mysql mysql
+Auto-Creation of Volumes
+
+If volume doesn’t exist:
+
+docker run -v new_volume:/data mysql
+
+Docker creates it automatically.
+
+Bind Mounts (Host Directory)
+docker run -v /data/mysql:/var/lib/mysql mysql
+Difference:
+Volume → managed by Docker
+Bind mount → uses host folder
+Recommended: --mount Syntax
+
+More explicit and modern:
+
+docker run \
+  --mount type=bind,source=/data/mysql,target=/var/lib/mysql \
+  mysql
+Docker Storage Drivers
+
+Storage drivers manage:
+
+Image layers
+Writable layer
+Copy-on-write
+Common Storage Drivers
+AUFS
+Overlay
+Overlay2 (default in most systems)
+Device Mapper
+BTRFS
+ZFS
+Overlay2 (Important)
+Default in modern Linux
+Efficient and stable
+Uses layered filesystem
+Key Concepts Summary
+Docker uses layered images
+Containers add a writable layer
+Data is lost when container is removed
+Volumes solve persistence
+Storage drivers manage filesystem layers
+Interview Points
+What is copy-on-write?
+Difference between volume and bind mount
+Where Docker stores data (/var/lib/docker)
+Why layers improve performance
+What happens when container is deleted
+Final Takeaway
+
+Docker storage is built on:
+
+Layers → efficiency
+Writable container layer → temporary changes
+Volumes → persistence
